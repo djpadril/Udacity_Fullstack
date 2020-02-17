@@ -40,11 +40,16 @@ class Venue(db.Model):
     state = db.Column(db.String(120))
     address = db.Column(db.String(120))
     phone = db.Column(db.String(120))
+    genres = db.Column(db.ARRAY(db.String))
     image_link = db.Column(db.String(500))
+    url_link = db.Column(db.String(120))
     facebook_link = db.Column(db.String(120))
     upcoming_show = db.Column(db.String(120))
-    artist = db.relationship('Artist', backref='Venue', lazy=True)
-    show = db.relationship('Show', backref='Venue', lazy=True)
+    seeking_talent = db.Column(db.String(120))
+    seeking_description = db.Column(db.String(120))
+    shows = db.relationship('Shows', backref= 'Venue', lazy='dynamic')
+
+    
 
 #artist is parent model of shows
 class Artist(db.Model):
@@ -55,16 +60,12 @@ class Artist(db.Model):
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     phone = db.Column(db.String(120))
+    genres = db.Column(db.ARRAY(db.String))
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     show = db.relationship('Shows', backref='Artist', lazy=True)
 
-# association table for artist and venue
-    artist_venue = db.Table('artist_venue', 
-      db.Column ('id', db.Integer, primaryKey=True, nullable=False),
-      db.Column ('artist_id', db.Integer, db.ForeignKey('artist_id'), nullable=False)
-      db.Column ('venue_id', db.Integer, db.ForeignKey('venue_id'), nullable=False)
       
 #class shows with foreign keys from its parent model artist
 class shows(db.Model):
@@ -72,24 +73,14 @@ class shows(db.Model):
 
       id = db.Column(db.Integer, primary_key=True)
       name = db.Column(db.String)
-      city = db.Column(db.String(120))
-      state = db.Column(db.String(120))
-      phone = db.Column(db.String(120))
-      genres = db.Column(db.String(120))
-      image_link = db.Column(db.String(500))
-      facebook_link = db.Column(db.String(120))
       venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), nullable=False)
       artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable=False)
-      artist = db.relationship('Artist', backref=db.backref('Shows'))
-
+      start_time = db.Column(db.String(120), nullable=False)
 
 class genres(db.Model):
       __tablename__ = 'Genres'
       id = db.Column(db.Integer, primary_key=True)
       genre = db.Column(db.String(120), nullable=False)
-
-
-
 
 
 #----------------------------------------------------------------------------#
@@ -122,28 +113,9 @@ def index():
 def venues():
   # TODO: replace with real venues data.
   #       num_shows should be aggregated based on number of upcoming shows per venue.
-  data=[{
-    "city": "San Francisco",
-    "state": "CA",
-    "venues": [{
-      "id": 1,
-      "name": "The Musical Hop",
-      "num_upcoming_shows": 0,
-    }, {
-      "id": 3,
-      "name": "Park Square Live Music & Coffee",
-      "num_upcoming_shows": 1,
-    }]
-  }, {
-    "city": "New York",
-    "state": "NY",
-    "venues": [{
-      "id": 2,
-      "name": "The Dueling Pianos Bar",
-      "num_upcoming_shows": 0,
-    }]
-  }]
-  return render_template('pages/venues.html', areas=data);
+  areas = Venue.query.order_by(Venue.city).all()
+  return render_template('pages/venues.html', areas=areas
+  )
 
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
