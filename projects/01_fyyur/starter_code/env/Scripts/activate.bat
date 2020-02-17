@@ -1,6 +1,6 @@
 @echo off
 
-set "VIRTUAL_ENV=C:\Users\djpad\OneDrive\Dokumente\GitHub\FSND\projects\01_fyyur\starter_code\env"
+set "VIRTUAL_ENV=C:\Users\djpad\OneDrive\Dokumente\GitHub\Udacity_Fullstack\projects\01_fyyur\starter_code\env"
 
 if defined _OLD_VIRTUAL_PROMPT (
     set "PROMPT=%_OLD_VIRTUAL_PROMPT%"

@@ -21,6 +21,7 @@ app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
+
 migrate = Migrate(app, db)
 
 
@@ -29,6 +30,7 @@ app.config.from_object('config')
 
 # Models.
 
+#parent model venue with association to the children artist and show
 class Venue(db.Model):
     __tablename__ = 'Venue'
 
@@ -40,16 +42,13 @@ class Venue(db.Model):
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-    shows = db.relationship('Shows', backref='Venue', lazy=True)
+    upcoming_show = db.Column(db.String(120))
+    artist = db.relationship('Artist', backref='Venue', lazy=True)
+    show = db.relationship('Show', backref='Venue', lazy=True)
 
-
-#Genres = db.Table('Genres',
-    #db.Column('artist_id', db.Integer, db.ForeignKey('artist_id'), primary_key=True),
-    #db.Column('venue_id', db.Integer, db.ForeignKey('venue_id'), primary_key=True)
-
-
-class Artist(object):
-      __tablename__ = 'Artist'
+#artist is parent model of shows
+class Artist(db.Model):
+    __tablename__ = 'Artist'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -59,9 +58,15 @@ class Artist(object):
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-    shows = db.relationship('Shows', backref='Artist', lazy=True)
+    show = db.relationship('Shows', backref='Artist', lazy=True)
 
-
+# association table for artist and venue
+    artist_venue = db.Table('artist_venue', 
+      db.Column ('id', db.Integer, primaryKey=True, nullable=False),
+      db.Column ('artist_id', db.Integer, db.ForeignKey('artist_id'), nullable=False)
+      db.Column ('venue_id', db.Integer, db.ForeignKey('venue_id'), nullable=False)
+      
+#class shows with foreign keys from its parent model artist
 class shows(db.Model):
       __tablename__ = 'Shows'
 
@@ -75,6 +80,17 @@ class shows(db.Model):
       facebook_link = db.Column(db.String(120))
       venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), nullable=False)
       artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable=False)
+      artist = db.relationship('Artist', backref=db.backref('Shows'))
+
+
+class genres(db.Model):
+      __tablename__ = 'Genres'
+      id = db.Column(db.Integer, primary_key=True)
+      genre = db.Column(db.String(120), nullable=False)
+
+
+
+
 
 #----------------------------------------------------------------------------#
 # Filters.

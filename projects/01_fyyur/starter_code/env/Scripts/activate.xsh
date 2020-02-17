@@ -28,7 +28,7 @@ def _deactivate(args):
 _deactivate(["nondestructive"])
 aliases["deactivate"] = _deactivate
 
-$VIRTUAL_ENV = r"C:\Users\djpad\OneDrive\Dokumente\GitHub\FSND\projects\01_fyyur\starter_code\env"
+$VIRTUAL_ENV = r"C:\Users\djpad\OneDrive\Dokumente\GitHub\Udacity_Fullstack\projects\01_fyyur\starter_code\env"
 
 $_OLD_VIRTUAL_PATH = $PATH
 $PATH = $PATH[:]

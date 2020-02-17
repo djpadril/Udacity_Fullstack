@@ -217,4 +217,24 @@ class ArtistForm(Form):
         'facebook_link', validators=[URL()]
     )
 
-# TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM
+
+#creat new artist form
+#@app.route('/artist/create/', methods=['POST'])
+#def create_artist():
+ # name = request.form.get('name', '')
+  #city = request.form.get('city', '')
+  #stage = request.form.get('state', '')
+  #phone = request.form.get('phone', '')
+ # image_link = request.form.get('image_link', '')
+  #genre = request.form.get('genres', '')
+  #facebook_link = request.form.get('facebook_link', '')
+
+
+#creat new show form
+#@app.route('/show/create/', methods=['POST'])
+#def create_show():
+ # artist_id = request.form.get('artist_id', '')
+  #venue_id = request.form.get('venue_id', '')
+  #start_time = reuqest.form.get('start_time')
+ 
+
